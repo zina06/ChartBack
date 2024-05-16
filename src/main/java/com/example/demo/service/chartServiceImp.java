@@ -16,9 +16,9 @@ public class chartServiceImp implements chartService {
 
 
 	@Override
-	public List<chartDto> getChart() {
+	public List<chartDto> getChart(String startDate, String endDate) {
 		// TODO Auto-generated method stub
-		return chartMapper.getChart();
+		return chartMapper.getChart(startDate, endDate);
 	}
 
 

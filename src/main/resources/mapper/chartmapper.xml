@@ -11,8 +11,12 @@
 	  IFNULL(PING, 0) AS PING
 	FROM
 		tb_urlping_id10_2403
-		  WHERE SUBSTR(DATE_FORMAT(time, '%Y%m%d') ,5,2) = '02'
+		--  WHERE SUBSTR(DATE_FORMAT(time, '%Y%m%d') ,5,2) = '03'
 		-- where  DATE_FORMAT(time, '%Y-%m-%d') between '2024-02-01' and '2024-02-01'
+		<if test="startDate!=null and endDate!=null">
+		WHERE DATE_FORMAT(TIME,'%Y-%m-%d') BETWEEN #{startDate} AND #{endDate}
+		</if>
+
 		ORDER BY TIME 
 	</select>    
 

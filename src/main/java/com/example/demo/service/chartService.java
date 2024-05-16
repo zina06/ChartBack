@@ -6,7 +6,7 @@ import com.example.demo.dto.chartDto;
 
 public interface chartService {
 	
-	public List<chartDto> getChart();
+	public List<chartDto> getChart(String startDate, String endDate);
 
 	public List<chartDto> getSumChart();
 

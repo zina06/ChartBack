@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +28,8 @@ public class chartcontroller {
 
 
 	 @GetMapping("/get/chartData") 
-	 public ResponseEntity<List<chartDto>> getChart(){ 
-		 List<chartDto> chartDto = chartService.getChart(); 
+	 public ResponseEntity<List<chartDto>> getChart(String startDate,String endDate){ 
+		 List<chartDto> chartDto = chartService.getChart(startDate, endDate);
 	       return new ResponseEntity<List<chartDto>>(chartDto, HttpStatus.OK); 
 	   }
 

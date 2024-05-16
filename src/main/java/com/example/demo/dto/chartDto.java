@@ -8,12 +8,14 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class chartDto {
 
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
+	@DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
 	private Date time;
+	
 	private int ping;
+		
+	private String startDate;
 	
-	
-
+	private String endDate;
 
 
 	public Date getTime() {
@@ -28,6 +30,19 @@ public class chartDto {
 	public void setPing(int ping) {
 		this.ping = ping;
 	}
+	public String getStartDate() {
+		return startDate;
+	}
+	public void setStartDate(String startDate) {
+		this.startDate = startDate;
+	}
+	public String getEndDate() {
+		return endDate;
+	}
+	public void setEndDate(String endDate) {
+		this.endDate = endDate;
+	}
+
 
 	
 	
