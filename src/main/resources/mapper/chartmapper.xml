@@ -5,20 +5,54 @@
 <mapper namespace="com.example.demo.mapper.chartMapper">
 
 	
- <select id="getChart">
+<!--  <select id="getChart">
 	SELECT
 	  TIME,
 	  IFNULL(PING, 0) AS PING
 	FROM
 		tb_urlping_id10_2403
-		--  WHERE SUBSTR(DATE_FORMAT(time, '%Y%m%d') ,5,2) = '03'
-		-- where  DATE_FORMAT(time, '%Y-%m-%d') between '2024-02-01' and '2024-02-01'
 		<if test="startDate!=null and endDate!=null">
 		WHERE DATE_FORMAT(TIME,'%Y-%m-%d') BETWEEN #{startDate} AND #{endDate}
 		</if>
-
 		ORDER BY TIME 
-	</select>    
+	</select> -->
+	
+	
+	
+	
+ 	<select id="getChart">
+ 	    <![CDATA[
+		WITH RECURSIVE DateSequence AS (
+		  SELECT #{startDate} AS date
+		  UNION ALL
+		  SELECT DATE_ADD(date, INTERVAL 1 DAY)
+		  FROM DateSequence
+		  WHERE DATE_ADD(date, INTERVAL 1 DAY) <= #{endDate}
+		)
+		SELECT IFNULL(TIME,DATE) AS TIME ,IFNULL(ping,0) AS PING
+		FROM DateSequence
+		LEFT JOIN
+		(SELECT
+			  TIME AS TIME,
+			  DATE_FORMAT(TIME,'%Y-%m-%d') AS FORMATTED_DATE,
+			  IFNULL(PING, 0) AS PING
+			FROM
+				tb_urlping_id10_2403
+				WHERE DATE_FORMAT(TIME,'%Y-%m-%d') BETWEEN #{startDate} AND #{endDate}
+				) B
+		  ON B.FORMATTED_DATE = DateSequence.date
+		  ORDER BY TIME, DATE
+		   ]]>
+	</select>   	
+	
+	
+	
+	
+	
+	
+	
+	
+	    
 
   <select id="getSumChart">
    SELECT SUBSTR(TIME,6) AS TIME, 
