@@ -13,9 +13,11 @@ public class chartDto {
 	
 	private int ping;
 		
-	private String startDate;
+	@DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+	private Date startDate;
 	
-	private String endDate;
+	@DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+	private Date endDate;
 
 
 	public Date getTime() {
@@ -30,16 +32,16 @@ public class chartDto {
 	public void setPing(int ping) {
 		this.ping = ping;
 	}
-	public String getStartDate() {
+	public Date getStartDate() {
 		return startDate;
 	}
-	public void setStartDate(String startDate) {
+	public void setStartDate(Date startDate) {
 		this.startDate = startDate;
 	}
-	public String getEndDate() {
+	public Date getEndDate() {
 		return endDate;
 	}
-	public void setEndDate(String endDate) {
+	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
 	}
 
