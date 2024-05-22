@@ -18,6 +18,8 @@ public class chartDto {
 	
 	@DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
 	private Date endDate;
+	
+	private String tableName;
 
 
 	public Date getTime() {
@@ -43,6 +45,12 @@ public class chartDto {
 	}
 	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
+	}
+	public String getTableName() {
+		return tableName;
+	}
+	public void setTableName(String tableName) {
+		this.tableName = tableName;
 	}
 
 

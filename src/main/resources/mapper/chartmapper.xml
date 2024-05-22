@@ -4,23 +4,9 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.demo.mapper.chartMapper">
 
+
 	
-<!--  <select id="getChart">
-	SELECT
-	  TIME,
-	  IFNULL(PING, 0) AS PING
-	FROM
-		tb_urlping_id10_2403
-		<if test="startDate!=null and endDate!=null">
-		WHERE DATE_FORMAT(TIME,'%Y-%m-%d') BETWEEN #{startDate} AND #{endDate}
-		</if>
-		ORDER BY TIME 
-	</select> -->
-	
-	
-	
-	
- 	<select id="getChart">
+ 	<select id="getChart" parameterType="map">
  	    <![CDATA[
 		WITH RECURSIVE DateSequence AS (
 		  SELECT #{startDate} AS date
@@ -37,7 +23,10 @@
 			  DATE_FORMAT(TIME,'%Y-%m-%d') AS FORMATTED_DATE,
 			  IFNULL(PING, 0) AS PING
 			FROM
-				tb_urlping_id10_2403
+				-- tb_urlping_id10_2403
+				<foreach collection="list" item="tableName"  open="(" close=")" separator=",">
+				     ${tableName}
+				 </foreach>
 				WHERE DATE_FORMAT(TIME,'%Y-%m-%d') BETWEEN #{startDate} AND #{endDate}
 				) B
 		  ON B.FORMATTED_DATE = DateSequence.date
@@ -46,26 +35,20 @@
 	</select>   	
 	
 	
-	
-	
-	
-	
-	
-	
-	    
 
-  <select id="getSumChart">
-   SELECT SUBSTR(TIME,6) AS TIME, 
-   		PING 
-   		FROM (
-		SELECT 
-		DATE_FORMAT(TIME, '%Y-%m-%d') AS TIME, 
-		SUM(PING) AS PING
-		FROM tb_urlping_id10_2403
-		WHERE SUBSTR(DATE_FORMAT(time, '%Y%m%d') ,5,2) = '03'
-		GROUP BY DATE_FORMAT(time, '%Y-%m-%d')
-		) AS A
-	</select> 
+
+	  <select id="getSumChart">
+	   SELECT SUBSTR(TIME,6) AS TIME, 
+	   		PING 
+	   		FROM (
+			SELECT 
+			DATE_FORMAT(TIME, '%Y-%m-%d') AS TIME, 
+			SUM(PING) AS PING
+			FROM tb_urlping_id10_2403
+			WHERE SUBSTR(DATE_FORMAT(time, '%Y%m%d') ,5,2) = '03'
+			GROUP BY DATE_FORMAT(time, '%Y-%m-%d')
+			) AS A
+		</select> 
 	
 
 	
