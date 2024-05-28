@@ -23,18 +23,73 @@
 			  DATE_FORMAT(TIME,'%Y-%m-%d') AS FORMATTED_DATE,
 			  IFNULL(PING, 0) AS PING
 			FROM
-				-- tb_urlping_id10_2403
-				<foreach collection="list" item="tableName"  open="(" close=")" separator=",">
-				     ${tableName}
-				 </foreach>
-				WHERE DATE_FORMAT(TIME,'%Y-%m-%d') BETWEEN #{startDate} AND #{endDate}
+				 tb_urlping_id10_2403
 				) B
-		  ON B.FORMATTED_DATE = DateSequence.date
+		  ON B.FORMATTED_DATE = A.DateSequence.date
 		  ORDER BY TIME, DATE
 		   ]]>
 	</select>   	
 	
 	
+  	 <select id="unionPingData" parameterType="map">	
+	 
+			        WITH RECURSIVE DateSequence AS (
+			            SELECT #{startDate} AS date
+			            UNION ALL
+			            SELECT DATE_ADD(date, INTERVAL 1 DAY)
+			            FROM DateSequence
+			            WHERE DATE_ADD(date, INTERVAL 1 DAY) &lt; #{endDate}
+			        )		  
+			        SELECT 
+			        '${tableName}' AS tableName,
+			            IFNULL(TIME, DATE) AS TIME, 
+			            IFNULL(ping, 0) AS PING
+			        FROM DateSequence
+			        LEFT JOIN ${tableName}
+			        ON DATE_FORMAT(TIME, '%Y-%m-%d') = DATE_FORMAT(DateSequence.date, '%Y-%m-%d')
+			        ORDER BY TIME
+
+			        	
+	</select>   
+	 
+	<select  id="selectChartTable">
+			SELECT table_name 
+				FROM information_schema.tables 
+				where table_name  like 'tb_urlping_id24_24%'
+	</select>
+	
+<!-- 						<select id="unionPingData">
+								WITH RECURSIVE DateSequence AS (
+							    SELECT #{startDate} AS date
+							    UNION ALL
+							    SELECT DATE_ADD(date, INTERVAL 1 DAY)
+							    FROM DateSequence
+							    WHERE DATE_ADD(date, INTERVAL 1 DAY) &lt; #{endDate}
+							)   
+							SELECT 
+							    '${tableName}' AS tableName,
+							    IFNULL(TIME, DATE) AS TIME, 
+							    IFNULL(ping, 0) AS PING
+							FROM DateSequence
+							LEFT JOIN ${tableName}
+							ON DATE_FORMAT(TIME, '%Y-%m-%d') = DATE_FORMAT(DateSequence.date, '%Y-%m-%d')
+							UNION ALL
+							<foreach collection="tableNameList" item="tableName" index="index" separator="UNION ALL">
+							    SELECT 
+							        '${tableName}' AS tableName,
+							        IFNULL(TIME, DATE) AS TIME, 
+							        IFNULL(ping, 0) AS PING
+							    FROM DateSequence
+							    LEFT JOIN ${tableName}
+							    ON DATE_FORMAT(TIME, '%Y-%m-%d') = DATE_FORMAT(DateSequence.date, '%Y-%m-%d')
+							</foreach>
+							
+							ORDER BY TIME;
+								
+						</select> -->
+	
+	
+
 
 
 	  <select id="getSumChart">
